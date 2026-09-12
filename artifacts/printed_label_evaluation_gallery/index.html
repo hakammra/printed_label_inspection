@@ -1,0 +1,2906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printed Label Defect Inspection - Locked Benchmark Visual Gallery</title>
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --card-bg: #131b2e;
+            --panel-bg: #0b1120;
+            --border-color: #23314d;
+            --accent-blue: #38bdf8;
+            --accent-cyan: #06b6d4;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --accent-purple: #a855f7;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px 32px;
+            line-height: 1.5;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 6px 0;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-sub {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 860px;
+        }
+        .benchmark-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            padding: 10px 16px;
+            text-align: right;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .stat-card.c-blue::before { background: var(--accent-blue); }
+        .stat-card.c-rose::before { background: var(--accent-rose); }
+        .stat-card.c-amber::before { background: var(--accent-amber); }
+        .stat-card.c-purple::before { background: var(--accent-purple); }
+        .stat-card.c-green::before { background: var(--accent-green); }
+
+        .stat-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .stat-sub {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4ade80;
+        }
+        .stat-lbl {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .stat-meta {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 4px;
+        }
+
+        .notice-banner {
+            background: rgba(30, 58, 138, 0.25);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .notice-banner strong { color: #60a5fa; }
+
+        .legend-bar {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            padding: 10px 16px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover {
+            background: #1e293b;
+            color: #fff;
+            border-color: #475569;
+        }
+        .btn.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
+        }
+        .btn-count {
+            background: rgba(255,255,255,0.15);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .btn-fail.active {
+            background: #be123c;
+            border-color: #f43f5e;
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.4);
+        }
+
+        .grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            transition: border-color 0.2s;
+        }
+        .card:hover {
+            border-color: #38bdf8;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-title-grp {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+        .card-condition {
+            font-size: 12px;
+            color: #64748b;
+        }
+        .badges-grp {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .badge {
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 5px;
+            letter-spacing: 0.3px;
+        }
+        .badge-normal { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-missing { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+        .badge-smudge { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-tear { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        .badge-our-detected { background: #065f46; color: #a7f3d0; border: 1px solid #10b981; }
+        .badge-our-pass { background: #1e3a8a; color: #bfdbfe; border: 1px solid #3b82f6; }
+        .badge-diff-miss { background: rgba(225, 29, 72, 0.25); color: #fca5a5; border: 1px solid #f43f5e; }
+        .badge-diff-ok { background: rgba(16, 185, 129, 0.2); color: #86efac; border: 1px solid #4ade80; }
+
+        .card-body {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 1200px) {
+            .card-body { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .card-body { grid-template-columns: 1fr; }
+        }
+        .panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--panel-bg);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .panel img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1063 / 650;
+            object-fit: contain;
+            border-radius: 4px;
+            background: #000;
+        }
+        .panel-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .panel-label strong { color: #38bdf8; }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 17, 32, 0.6);
+            border-radius: 6px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            font-size: 12.5px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .meta-col { display: flex; gap: 14px; flex-wrap: wrap; }
+        .meta-item strong { color: #fff; font-weight: 700; }
+        .meta-item.trigger strong { color: #38bdf8; }
+        .meta-item.diff strong.pass { color: #4ade80; }
+        .meta-item.diff strong.fail { color: #f87171; }
+        .meta-item.dice strong { color: #facc15; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Printed Label Locked Benchmark Gallery</h1>
+            <div class="header-sub">
+                Complete 53-sample visual gallery comparing the Research Paper Baseline Diffusion DTU-Net against the Region-Aware Multi-Stream Machine Vision Engine.
+            </div>
+        </div>
+        <div class="benchmark-badge">
+            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Benchmark Status</div>
+            <div style="font-size: 16px; font-weight: 800; color: #38bdf8;">100% Locked Defect Recall</div>
+            <div style="font-size: 11px; color: #4ade80;">73 ms CPU Latency (52x Faster)</div>
+        </div>
+    </div>
+
+    <div class="notice-banner">
+        💡 <strong>How to read each card:</strong> The images in <strong>Panel 4 (Detected Mask)</strong> and <strong>Panel 5 (Color BBox Overlay)</strong> are produced by <strong>Our New Region-Aware Engine</strong> (which successfully caught 100% of defects). The red badge <strong>[Paper's DTU-Net: MISSED ❌]</strong> highlights that the <strong>Old Research Paper Diffusion Model failed</strong> to detect this defect because of the generative reconstruction paradox.
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card c-blue">
+            <div class="stat-val">43 / 43 <span class="stat-sub">100%</span></div>
+            <div class="stat-lbl">Overall Defect Recall (Our Engine)</div>
+            <div class="stat-meta">Baseline DTU-Net: 11 / 43 (25.6%) &bull; Gain: +74.4%</div>
+        </div>
+        <div class="stat-card c-green">
+            <div class="stat-val">10 / 10 <span class="stat-sub">100%</span></div>
+            <div class="stat-lbl">Clean Normal Specificity</div>
+            <div class="stat-meta">Zero False Alarms &bull; Baseline: 9 / 10 (90%)</div>
+        </div>
+        <div class="stat-card c-rose">
+            <div class="stat-val">15 / 15 <span class="stat-sub">100%</span></div>
+            <div class="stat-lbl">Missing Print Recovered</div>
+            <div class="stat-meta">Baseline DTU-Net: 0 / 15 (0.0% Complete Failure)</div>
+        </div>
+        <div class="stat-card c-amber">
+            <div class="stat-val">15 / 15 <span class="stat-sub">100%</span></div>
+            <div class="stat-lbl">Ink Smudges Detected</div>
+            <div class="stat-meta">Baseline DTU-Net: 0 / 15 (0.0% Complete Failure)</div>
+        </div>
+        <div class="stat-card c-purple">
+            <div class="stat-val">13 / 13 <span class="stat-sub">100%</span></div>
+            <div class="stat-lbl">Edge Tears Detected</div>
+            <div class="stat-meta">Baseline DTU-Net: 11 / 13 (84.6%) &bull; Gain: +15.4%</div>
+        </div>
+    </div>
+
+    <div class="legend-bar">
+        <span style="font-weight: 700; color: #fff;">Legend:</span>
+        <div class="legend-item"><div class="legend-dot" style="background: #f43f5e;"></div> Missing Print (Barcode / Text Loss)</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #f59e0b;"></div> Ink Smudge (Bleed / Overinking)</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #a855f7;"></div> Edge Tear (Margin Substrate Rupture)</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #10b981;"></div> Clean Normal (Conforming)</div>
+        <div class="legend-item" style="margin-left: auto; color: #fca5a5;">Red Badge = Research Paper Diffusion Model Failed / Missed</div>
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-controls">
+            <button class="btn active" onclick="filterCat('all', event)">Show All <span class="btn-count">53</span></button>
+            <button class="btn" onclick="filterCat('missing_print', event)">Missing Print <span class="btn-count">15</span></button>
+            <button class="btn" onclick="filterCat('smudge', event)">Ink Smudge <span class="btn-count">15</span></button>
+            <button class="btn" onclick="filterCat('tear', event)">Edge Tear <span class="btn-count">13</span></button>
+            <button class="btn" onclick="filterCat('normal', event)">Clean Normal <span class="btn-count">10</span></button>
+            <button class="btn btn-fail" onclick="filterCat('diff_fail', event)">Diffusion Failures Solved <span class="btn-count">32</span></button>
+        </div>
+        <div style="font-size: 13px; color: #64748b;" id="filterCountDisplay">Showing all 53 captures</div>
+    </div>
+
+    <div class="grid" id="cardGrid">
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#00: N11_B1_51.png</span>
+                    <span class="card-condition">Physical ID: <strong>N11</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_000_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_000_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_000_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_000_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_000_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.708</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>1.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>1.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0190</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#01: N11_B2_53.png</span>
+                    <span class="card-condition">Physical ID: <strong>N11</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_001_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_001_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_001_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_001_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_001_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.737</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0169</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#02: N11_B3_55.png</span>
+                    <span class="card-condition">Physical ID: <strong>N11</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_002_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_002_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_002_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_002_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_002_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.733</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0205</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#03: N11_B4_57.png</span>
+                    <span class="card-condition">Physical ID: <strong>N11</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_003_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_003_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_003_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_003_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_003_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.743</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0149</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#04: N11_B5_59.png</span>
+                    <span class="card-condition">Physical ID: <strong>N11</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: FALSE ALARM ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_004_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_004_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_004_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_004_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_004_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.786</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0310</strong> &bull; <strong class="fail">FALSE ALARM (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#05: N12_B1_52.png</span>
+                    <span class="card-condition">Physical ID: <strong>N12</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_005_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_005_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_005_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_005_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_005_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.794</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0164</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#06: N12_B2_54.png</span>
+                    <span class="card-condition">Physical ID: <strong>N12</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_006_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_006_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_006_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_006_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_006_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.800</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0204</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#07: N12_B3_56.png</span>
+                    <span class="card-condition">Physical ID: <strong>N12</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_007_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_007_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_007_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_007_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_007_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.755</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0214</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#08: N12_B4_58.png</span>
+                    <span class="card-condition">Physical ID: <strong>N12</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_008_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_008_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_008_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_008_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_008_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.812</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0225</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="normal" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#09: N12_B5_60.png</span>
+                    <span class="card-condition">Physical ID: <strong>N12</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-normal">Clean Normal</span>
+                    <span class="badge badge-our-pass">Our Engine: CLEAN PASS ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Correct Pass ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_009_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_009_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_009_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_009_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_009_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>0.885</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.000</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.000</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0271</strong> &bull; <strong class="pass">NORMAL (PASS)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#10: M01_B1_091.png</span>
+                    <span class="card-condition">Physical ID: <strong>M01</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_010_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_010_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_010_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_010_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_010_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.844</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.730</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0158</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#11: M01_B2_094.png</span>
+                    <span class="card-condition">Physical ID: <strong>M01</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_011_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_011_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_011_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_011_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_011_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.831</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.711</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0155</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#12: M01_B3_097.png</span>
+                    <span class="card-condition">Physical ID: <strong>M01</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_012_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_012_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_012_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_012_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_012_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.834</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.715</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0129</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#13: M01_B4_100.png</span>
+                    <span class="card-condition">Physical ID: <strong>M01</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_013_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_013_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_013_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_013_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_013_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.835</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.716</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0142</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#14: M01_B5_103.png</span>
+                    <span class="card-condition">Physical ID: <strong>M01</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_014_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_014_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_014_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_014_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_014_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.796</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.661</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0161</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#15: M02_B1_092.png</span>
+                    <span class="card-condition">Physical ID: <strong>M02</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_015_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_015_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_015_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_015_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_015_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.409</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.356</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.217</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0198</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#16: M02_B2_095.png</span>
+                    <span class="card-condition">Physical ID: <strong>M02</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_016_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_016_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_016_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_016_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_016_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.396</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.355</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.216</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0175</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#17: M02_B3_098.png</span>
+                    <span class="card-condition">Physical ID: <strong>M02</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_017_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_017_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_017_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_017_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_017_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.376</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.355</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.216</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0136</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#18: M02_B4_101.png</span>
+                    <span class="card-condition">Physical ID: <strong>M02</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_018_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_018_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_018_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_018_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_018_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.485</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.359</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.219</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0147</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#19: M02_B5_104.png</span>
+                    <span class="card-condition">Physical ID: <strong>M02</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_019_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_019_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_019_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_019_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_019_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.322</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.357</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.217</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0178</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#20: M03_B1_093.png</span>
+                    <span class="card-condition">Physical ID: <strong>M03</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_020_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_020_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_020_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_020_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_020_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.642</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.213</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.119</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0182</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#21: M03_B2_096.png</span>
+                    <span class="card-condition">Physical ID: <strong>M03</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_021_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_021_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_021_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_021_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_021_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.612</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.212</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.118</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0164</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#22: M03_B3_099.png</span>
+                    <span class="card-condition">Physical ID: <strong>M03</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_022_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_022_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_022_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_022_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_022_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.566</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.211</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.118</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0120</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#23: M03_B4_102.png</span>
+                    <span class="card-condition">Physical ID: <strong>M03</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_023_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_023_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_023_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_023_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_023_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.625</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.214</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.120</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0155</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="missing_print" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#24: M03_B5_105.png</span>
+                    <span class="card-condition">Physical ID: <strong>M03</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-missing">Missing Print</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_024_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_024_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_024_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_024_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_024_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.529</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.215</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.120</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0233</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#25: S01_B1_061.png</span>
+                    <span class="card-condition">Physical ID: <strong>S01</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_025_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_025_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_025_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_025_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_025_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.080</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.089</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.047</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0169</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#26: S01_B2_64.png</span>
+                    <span class="card-condition">Physical ID: <strong>S01</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_026_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_026_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_026_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_026_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_026_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.200</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.073</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.038</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0218</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#27: S01_B3_067.png</span>
+                    <span class="card-condition">Physical ID: <strong>S01</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_027_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_027_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_027_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_027_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_027_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.720</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.125</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.067</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0216</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#28: S01_B4_070.png</span>
+                    <span class="card-condition">Physical ID: <strong>S01</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_028_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_028_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_028_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_028_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_028_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.600</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.073</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.038</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0258</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#29: S01_B5_073.png</span>
+                    <span class="card-condition">Physical ID: <strong>S01</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_029_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_029_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_029_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_029_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_029_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.680</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.073</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.038</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0288</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#30: S02_B1_62.png</span>
+                    <span class="card-condition">Physical ID: <strong>S02</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_030_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_030_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_030_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_030_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_030_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.935</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.058</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.030</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0143</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#31: S02_B2_65.png</span>
+                    <span class="card-condition">Physical ID: <strong>S02</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_031_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_031_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_031_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_031_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_031_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.053</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.027</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0153</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#32: S02_B3_068.png</span>
+                    <span class="card-condition">Physical ID: <strong>S02</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_032_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_032_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_032_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_032_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_032_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.030</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.053</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.028</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0158</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#33: S02_B4_071.png</span>
+                    <span class="card-condition">Physical ID: <strong>S02</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_033_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_033_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_033_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_033_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_033_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.065</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.051</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.026</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0140</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#34: S02_B5_074.png</span>
+                    <span class="card-condition">Physical ID: <strong>S02</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_034_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_034_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_034_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_034_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_034_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.210</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.049</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.025</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0145</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#35: S03_B1_63.png</span>
+                    <span class="card-condition">Physical ID: <strong>S03</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_035_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_035_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_035_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_035_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_035_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.055</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.139</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.074</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0242</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#36: S03_B2_66.png</span>
+                    <span class="card-condition">Physical ID: <strong>S03</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_036_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_036_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_036_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_036_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_036_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.088</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.083</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.043</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0223</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#37: S03_B3_069.png</span>
+                    <span class="card-condition">Physical ID: <strong>S03</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_037_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_037_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_037_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_037_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_037_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.045</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.350</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.212</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0231</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#38: S03_B4_072.png</span>
+                    <span class="card-condition">Physical ID: <strong>S03</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_038_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_038_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_038_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_038_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_038_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.093</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.202</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.112</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0210</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="smudge" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#39: S03_B5_075.png</span>
+                    <span class="card-condition">Physical ID: <strong>S03</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-smudge">Ink Smudge</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_039_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_039_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_039_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_039_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_039_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.344</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.157</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.085</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0258</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#40: T01_B1_076.png</span>
+                    <span class="card-condition">Physical ID: <strong>T01</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_040_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_040_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_040_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_040_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_040_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>115.455</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.641</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.472</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0707</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#41: T01_B2_079.png</span>
+                    <span class="card-condition">Physical ID: <strong>T01</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_041_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_041_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_041_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_041_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_041_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>73.730</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.486</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.322</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0511</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#42: T01_B5_088.png</span>
+                    <span class="card-condition">Physical ID: <strong>T01</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_042_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_042_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_042_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_042_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_042_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>barcode_missing</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>2.000</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.322</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.192</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0194</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#43: T02_B1_077.png</span>
+                    <span class="card-condition">Physical ID: <strong>T02</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_043_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_043_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_043_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_043_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_043_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>25.390</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.678</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.513</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0479</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#44: T02_B2_080.png</span>
+                    <span class="card-condition">Physical ID: <strong>T02</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_044_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_044_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_044_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_044_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_044_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>24.100</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.668</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.501</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0401</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#45: T02_B3_083.png</span>
+                    <span class="card-condition">Physical ID: <strong>T02</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_045_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_045_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_045_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_045_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_045_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>25.415</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.682</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.517</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0556</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#46: T02_B4_086.png</span>
+                    <span class="card-condition">Physical ID: <strong>T02</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_046_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_046_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_046_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_046_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_046_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>26.680</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.573</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.402</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0574</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="true">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#47: T02_B5_089.png</span>
+                    <span class="card-condition">Physical ID: <strong>T02</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-miss">Paper's DTU-Net: MISSED ❌</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_047_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_047_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_047_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_047_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_047_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>text_smudge</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>1.147</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.333</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.200</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0248</strong> &bull; <strong class="fail">MISSED (FAIL)</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#48: T03_B1_078.png</span>
+                    <span class="card-condition">Physical ID: <strong>T03</strong> &bull; Warm Overhead (3000K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_048_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_048_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_048_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_048_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_048_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>32.890</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.742</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.589</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0543</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#49: T03_B2_081.png</span>
+                    <span class="card-condition">Physical ID: <strong>T03</strong> &bull; Cool Direct (6500K)</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_049_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_049_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_049_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_049_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_049_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>26.500</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.598</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.426</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0385</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#50: T03_B3_084.png</span>
+                    <span class="card-condition">Physical ID: <strong>T03</strong> &bull; Low Angle Shadow</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_050_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_050_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_050_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_050_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_050_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>29.695</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.653</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.485</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0579</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#51: T03_B4_087.png</span>
+                    <span class="card-condition">Physical ID: <strong>T03</strong> &bull; High Exposure Glare</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_051_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_051_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_051_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_051_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_051_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>29.490</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.514</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.346</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0526</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" data-category="tear" data-difffail="false">
+            <div class="card-header">
+                <div class="card-title-grp">
+                    <span class="card-title">#52: T03_B5_090.png</span>
+                    <span class="card-condition">Physical ID: <strong>T03</strong> &bull; Diffuse Daylight</span>
+                </div>
+                <div class="badges-grp">
+                    <span class="badge badge-tear">Edge Tear</span>
+                    <span class="badge badge-our-detected">Our Engine: DETECTED ✅</span>
+                    <span class="badge badge-diff-ok">Paper's DTU-Net: Detected ✅</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="panel">
+                    <img src="images/sample_052_orig.jpg" alt="Input" loading="lazy">
+                    <div class="panel-label">1. Registered Capture</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_052_heat.jpg" alt="Anomaly Heatmap" loading="lazy">
+                    <div class="panel-label">2. Photometric Heatmap</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_052_gt.png" alt="Ground Truth" loading="lazy">
+                    <div class="panel-label">3. Ground Truth</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_052_pred.png" alt="Detected Mask" loading="lazy">
+                    <div class="panel-label">4. <strong>Our Engine</strong> Mask</div>
+                </div>
+                <div class="panel">
+                    <img src="images/sample_052_comp.jpg" alt="Composite Overlay" loading="lazy">
+                    <div class="panel-label">5. <strong>Our Engine</strong> Color BBox</div>
+                </div>
+            </div>
+            <div class="card-meta">
+                <div class="meta-col">
+                    <span class="meta-item trigger">Our Engine Trigger: <strong>margin</strong></span>
+                    <span class="meta-item">Our Engine Score: <strong>35.435</strong> (tau=1.0)</span>
+                    <span class="meta-item dice">Dice: <strong>0.598</strong></span>
+                    <span class="meta-item dice">IoU: <strong>0.426</strong></span>
+                </div>
+                <div class="meta-col">
+                    <span class="meta-item diff">Research Paper DTU-Net Score: <strong>0.0458</strong> &bull; <strong class="pass">DETECTED</strong></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function filterCat(cat, evt) {
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+            cards.forEach(c => {
+                let match = false;
+                if (cat === 'all') {
+                    match = true;
+                } else if (cat === 'diff_fail') {
+                    match = (c.getAttribute('data-difffail') === 'true');
+                } else {
+                    match = (c.getAttribute('data-category') === cat);
+                }
+                if (match) {
+                    c.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    c.style.display = 'none';
+                }
+            });
+            const disp = document.getElementById('filterCountDisplay');
+            if (disp) {
+                disp.textContent = `Showing ${visibleCount} of 53 captures`;
+            }
+        }
+    </script>
+</body>
+</html>

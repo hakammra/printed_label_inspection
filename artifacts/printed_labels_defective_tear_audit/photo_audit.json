@@ -1,0 +1,72 @@
+{
+  "source": "C:\\Users\\abdul\\Documents\\LabelInspect\\data\\printed_labels\\Defective\\Tear",
+  "image_count": 15,
+  "labels": {
+    "T01": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "T02": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "T03": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ]
+  },
+  "view_counts": {
+    "B1": 3,
+    "B2": 3,
+    "B3": 3,
+    "B4": 3,
+    "B5": 3
+  },
+  "dimensions": {
+    "3000x4000": 15
+  },
+  "sharpness": {
+    "minimum": 191.56,
+    "median": 275.67,
+    "maximum": 470.4,
+    "lowest_five": [
+      {
+        "file": "T01_B5_088.jpg",
+        "score": 191.56
+      },
+      {
+        "file": "T03_B5_090.jpg",
+        "score": 208.84
+      },
+      {
+        "file": "T01_B3_082.jpg",
+        "score": 213.14
+      },
+      {
+        "file": "T02_B5_089.jpg",
+        "score": 219.92
+      },
+      {
+        "file": "T01_B4_085.jpg",
+        "score": 256.27
+      }
+    ]
+  },
+  "brightness": {
+    "minimum_mean": 53.91,
+    "median_mean": 81.66,
+    "maximum_mean": 130.77
+  },
+  "exact_duplicate_groups": [],
+  "near_duplicate_pairs_dhash_le_4": [],
+  "filename_parse_failures": []
+}

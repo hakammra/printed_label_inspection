@@ -1,0 +1,114 @@
+{
+  "status": "completed_region_aware_improved_evaluation",
+  "scope": "printed_label_defect_inspection",
+  "method": "Region-Aware Multi-Stream Machine Vision Engine",
+  "registered_test_images": 53,
+  "registered_normal_images": 10,
+  "registered_anomaly_images": 43,
+  "mean_inference_seconds_per_image": 0.17427363485660194,
+  "aggregate_metrics": {
+    "image_auroc": 1.0,
+    "average_precision": 1.0000000000000002,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "precision": 1.0,
+    "f1": 1.0,
+    "balanced_accuracy": 1.0,
+    "mean_dice_defect_images": 0.37995348837209303,
+    "mean_iou_defect_images": 0.26991860465116274,
+    "tp": 43,
+    "tn": 10,
+    "fp": 0,
+    "fn": 0
+  },
+  "by_category": {
+    "missing_print": {
+      "image_count": 15,
+      "physical_defects": 3,
+      "image_sensitivity": 1.0,
+      "auroc_vs_normals": 1.0,
+      "average_precision_vs_normals": 1.0,
+      "mean_dice": 0.4550133333333333,
+      "mean_iou": 0.34030666666666665,
+      "min_score": 1.3219,
+      "median_score": 1.6118,
+      "max_score": 2.0
+    },
+    "smudge": {
+      "image_count": 15,
+      "physical_defects": 3,
+      "image_sensitivity": 1.0,
+      "auroc_vs_normals": 1.0,
+      "average_precision_vs_normals": 1.0,
+      "mean_dice": 0.13568666666666665,
+      "mean_iou": 0.07481333333333333,
+      "min_score": 1.0454,
+      "median_score": 1.72,
+      "max_score": 2.21
+    },
+    "tear": {
+      "image_count": 13,
+      "physical_defects": 3,
+      "image_sensitivity": 1.0,
+      "auroc_vs_normals": 1.0,
+      "average_precision_vs_normals": 0.9999999999999998,
+      "mean_dice": 0.5751923076923077,
+      "mean_iou": 0.41382307692307696,
+      "min_score": 1.1472,
+      "median_score": 26.68,
+      "max_score": 115.455
+    }
+  },
+  "comparison_with_diffusion_dtunet": {
+    "auroc": {
+      "dtunet": 0.512,
+      "improved": 1.0,
+      "gain": 0.488
+    },
+    "ap": {
+      "dtunet": 0.866,
+      "improved": 1.0000000000000002,
+      "gain": 0.13400000000000023
+    },
+    "sensitivity": {
+      "dtunet": 0.256,
+      "improved": 1.0,
+      "gain": 0.744
+    },
+    "specificity": {
+      "dtunet": 0.9,
+      "improved": 1.0,
+      "gain": 0.09999999999999998
+    },
+    "f1": {
+      "dtunet": 0.4,
+      "improved": 1.0,
+      "gain": 0.6
+    },
+    "missing_print_recall": {
+      "dtunet": 0.0,
+      "improved": 1.0,
+      "gain": 1.0
+    },
+    "smudge_recall": {
+      "dtunet": 0.0,
+      "improved": 1.0,
+      "gain": 1.0
+    },
+    "tear_recall": {
+      "dtunet": 0.846,
+      "improved": 1.0,
+      "gain": 0.15400000000000003
+    },
+    "mean_dice": {
+      "dtunet": 0.16,
+      "improved": 0.37995348837209303,
+      "gain": 0.21995348837209303
+    },
+    "mean_seconds_per_image": {
+      "dtunet": 4.0,
+      "improved": 0.17427363485660194,
+      "speedup": 22.952410462381938
+    }
+  }
+}

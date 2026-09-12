@@ -1,0 +1,72 @@
+{
+  "source": "C:\\Users\\abdul\\Documents\\LabelInspect\\data\\printed_labels\\Defective\\Miss",
+  "image_count": 15,
+  "labels": {
+    "M01": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "M02": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "M03": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ]
+  },
+  "view_counts": {
+    "B1": 3,
+    "B2": 3,
+    "B3": 3,
+    "B4": 3,
+    "B5": 3
+  },
+  "dimensions": {
+    "3000x4000": 15
+  },
+  "sharpness": {
+    "minimum": 116.13,
+    "median": 262.6,
+    "maximum": 362.37,
+    "lowest_five": [
+      {
+        "file": "M01_B5_103.jpg",
+        "score": 116.13
+      },
+      {
+        "file": "M01_B4_100.jpg",
+        "score": 176.84
+      },
+      {
+        "file": "M02_B4_101.jpg",
+        "score": 190.06
+      },
+      {
+        "file": "M02_B5_104.jpg",
+        "score": 215.0
+      },
+      {
+        "file": "M01_B3_097.jpg",
+        "score": 229.55
+      }
+    ]
+  },
+  "brightness": {
+    "minimum_mean": 59.33,
+    "median_mean": 79.47,
+    "maximum_mean": 130.87
+  },
+  "exact_duplicate_groups": [],
+  "near_duplicate_pairs_dhash_le_4": [],
+  "filename_parse_failures": []
+}

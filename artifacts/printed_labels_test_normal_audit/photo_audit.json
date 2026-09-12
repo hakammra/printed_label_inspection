@@ -1,0 +1,65 @@
+{
+  "source": "C:\\Users\\abdul\\Documents\\LabelInspect\\data\\printed_labels\\Testing",
+  "image_count": 10,
+  "labels": {
+    "N11": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N12": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ]
+  },
+  "view_counts": {
+    "B1": 2,
+    "B2": 2,
+    "B3": 2,
+    "B4": 2,
+    "B5": 2
+  },
+  "dimensions": {
+    "3000x4000": 10
+  },
+  "sharpness": {
+    "minimum": 184.85,
+    "median": 302.03,
+    "maximum": 419.12,
+    "lowest_five": [
+      {
+        "file": "N12_B5_60.jpg",
+        "score": 184.85
+      },
+      {
+        "file": "N11_B5_59.jpg",
+        "score": 193.7
+      },
+      {
+        "file": "N12_B3_56.jpg",
+        "score": 249.31
+      },
+      {
+        "file": "N11_B3_55.jpg",
+        "score": 269.77
+      },
+      {
+        "file": "N11_B4_57.jpg",
+        "score": 286.58
+      }
+    ]
+  },
+  "brightness": {
+    "minimum_mean": 57.74,
+    "median_mean": 85.19,
+    "maximum_mean": 131.8
+  },
+  "exact_duplicate_groups": [],
+  "near_duplicate_pairs_dhash_le_4": [],
+  "filename_parse_failures": []
+}

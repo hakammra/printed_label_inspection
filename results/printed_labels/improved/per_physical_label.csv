@@ -1,0 +1,12 @@
+physical_id,category,capture_count,detected_capture_count,capture_detection_rate,any_capture_detected,majority_captures_detected,median_image_score,max_image_score
+M01,missing_print,5,5,1.0,1,1,2.0,2.0
+M02,missing_print,5,5,1.0,1,1,1.3964,1.4847
+M03,missing_print,5,5,1.0,1,1,1.6118,1.6421
+N11,normal,5,0,0.0,0,0,0.7369,0.7857
+N12,normal,5,0,0.0,0,0,0.7997,0.885
+S01,smudge,5,5,1.0,1,1,1.72,2.2
+S02,smudge,5,5,1.0,1,1,2.03,2.21
+S03,smudge,5,5,1.0,1,1,1.0876,1.3441
+T01,tear,3,3,1.0,1,1,73.73,115.455
+T02,tear,5,5,1.0,1,1,25.39,26.68
+T03,tear,5,5,1.0,1,1,29.695,35.435

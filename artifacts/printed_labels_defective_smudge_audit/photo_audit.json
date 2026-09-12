@@ -1,0 +1,72 @@
+{
+  "source": "C:\\Users\\abdul\\Documents\\LabelInspect\\data\\printed_labels\\Defective\\Smudge",
+  "image_count": 15,
+  "labels": {
+    "S01": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "S02": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "S03": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ]
+  },
+  "view_counts": {
+    "B1": 3,
+    "B2": 3,
+    "B3": 3,
+    "B4": 3,
+    "B5": 3
+  },
+  "dimensions": {
+    "3000x4000": 15
+  },
+  "sharpness": {
+    "minimum": 175.82,
+    "median": 264.25,
+    "maximum": 497.3,
+    "lowest_five": [
+      {
+        "file": "S03_B3_069.jpg",
+        "score": 175.82
+      },
+      {
+        "file": "S03_B4_072.jpg",
+        "score": 211.89
+      },
+      {
+        "file": "S01_B5_073.jpg",
+        "score": 226.7
+      },
+      {
+        "file": "S03_B5_075.jpg",
+        "score": 241.52
+      },
+      {
+        "file": "S01_B3_067.jpg",
+        "score": 243.72
+      }
+    ]
+  },
+  "brightness": {
+    "minimum_mean": 59.95,
+    "median_mean": 84.38,
+    "maximum_mean": 132.06
+  },
+  "exact_duplicate_groups": [],
+  "near_duplicate_pairs_dhash_le_4": [],
+  "filename_parse_failures": []
+}

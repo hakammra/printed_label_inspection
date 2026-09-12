@@ -1,0 +1,107 @@
+{
+  "source": "C:\\Users\\abdul\\Documents\\LabelInspect\\data\\printed_labels\\Normal",
+  "image_count": 40,
+  "labels": {
+    "N01": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N02": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N03": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N04": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N05": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N06": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N07": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ],
+    "N08": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5"
+    ]
+  },
+  "view_counts": {
+    "B1": 8,
+    "B2": 8,
+    "B3": 8,
+    "B4": 8,
+    "B5": 8
+  },
+  "dimensions": {
+    "3000x4000": 40
+  },
+  "sharpness": {
+    "minimum": 169.55,
+    "median": 293.44,
+    "maximum": 489.6,
+    "lowest_five": [
+      {
+        "file": "N02_B4_026.jpg",
+        "score": 169.55
+      },
+      {
+        "file": "N01_B5_033.jpg",
+        "score": 216.12
+      },
+      {
+        "file": "N06_B5_037.jpg",
+        "score": 219.12
+      },
+      {
+        "file": "N03_B5_035.jpg",
+        "score": 226.97
+      },
+      {
+        "file": "N02_B5_034.jpg",
+        "score": 231.76
+      }
+    ]
+  },
+  "brightness": {
+    "minimum_mean": 54.18,
+    "median_mean": 66.8,
+    "maximum_mean": 131.71
+  },
+  "exact_duplicate_groups": [],
+  "near_duplicate_pairs_dhash_le_4": [],
+  "filename_parse_failures": []
+}
