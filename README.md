@@ -14,7 +14,7 @@ Printed packaging inspection requires zero tolerance for missing mandatory data 
 
 ### Key Results at a Glance
 
-| Performance Metric | Academic DTU-Net Diffusion | Our Region-Aware Engine |
+| Performance Metric | Academic DTU-Net Diffusion (Baseline) | Region-Aware Multi-Stream Pipeline (RA-AOI) |
 | :--- | :---: | :---: |
 | **Missing Print Recall** (15 samples) | **0.0%** (0 / 15) ❌ | **100.0%** (15 / 15) ✅ |
 | **Ink Smudge Recall** (15 samples) | **0.0%** (0 / 15) ❌ | **100.0%** (15 / 15) ✅ |
@@ -24,15 +24,16 @@ Printed packaging inspection requires zero tolerance for missing mandatory data 
 | **Inference Latency** | **~3,780 ms (GPU)** | **~80 ms (CPU)** |
 | **Hardware Requirement** | NVIDIA GPU (CUDA) | Lightweight Embedded CPU |
 
-### Visual Detection Gallery (Our Engine)
+### Visual Detection Gallery (Region-Aware Multi-Stream AOI)
 ![Visual Gallery](results/printed_labels/improved/visual_gallery.png)
-*Figure 1: Multi-category defect detection on registered packaging labels using the Region-Aware Engine. Across all 53 physical test captures (Missing Prints, Ink Smudges, Edge Tears, and Clean Controls), our engine isolates the defect with exact spatial bounding boxes and pixel masks.*
+*Figure 1: Multi-category defect detection on registered packaging labels using the Region-Aware Multi-Stream Pipeline (RA-AOI). Across all 53 physical test captures (Missing Prints, Ink Smudges, Edge Tears, and Clean Controls), the pipeline isolates the defect with exact spatial bounding boxes and pixel masks.*
 
 ### ROC & Precision-Recall Comparison
 ![ROC and PR Curves](results/printed_labels/improved/roc_and_pr_curve_comparison.png)
-*Figure 2: Head-to-head performance curves comparing Academic DTU-Net Diffusion (AUROC 0.512, AP 0.866) against Our Region-Aware Machine Vision Engine (AUROC 1.000, AP 1.000).*
+*Figure 2: Head-to-head performance curves comparing Academic DTU-Net Diffusion (AUROC 0.512, AP 0.866) against the Region-Aware Machine Vision Pipeline (AUROC 1.000, AP 1.000).*
 
 ---
+
 
 
 ## The Academic Generative Paradox
@@ -116,7 +117,7 @@ Traces the exterior boundary of the white label backing against the conveyor bac
 An interactive 5-panel HTML inspection dashboard is included to review all 53 physical test captures:
 
 ```
-[1. Registered Capture]  [2. Photometric Heatmap]  [3. Ground Truth]  [4. Our Engine Mask]  [5. Color BBox Overlay]
+[1. Registered Capture]  [2. Photometric Heatmap]  [3. Ground Truth]  [4. RA-AOI Segmented Mask]  [5. Color BBox Overlay]
 ```
 
 ### Accessing the Gallery
@@ -127,7 +128,7 @@ artifacts/printed_label_evaluation_gallery/index.html
 
 **Gallery Capabilities**:
 * **Filter by Defect Category**: Normal (10), Missing Print (15), Ink Smudge (15), Edge Tear (13).
-* **Filter Diffusion Failures Solved**: Instantly view the 32 defect cases where DTU-Net failed completely and our engine succeeded.
+* **Filter Diffusion Failures Solved**: Instantly view the 32 defect cases where DTU-Net failed completely and the RA-AOI pipeline succeeded.
 * **Side-by-Side Model Badges**: Clear visual tags highlighting detection results and anomaly scores for both systems.
 
 ---
@@ -208,3 +209,12 @@ Execute the unit tests to verify inspection determinism across all sample condit
 ```bash
 python -m unittest discover -s tests
 ```
+
+---
+
+## Attribution & Academic Context
+
+* **Baseline Benchmark Comparison**:  
+  The generative diffusion baseline evaluated in this study is **DTU-Net**, introduced by *Kumar et al.* in **"Self-Supervised Anomaly Segmentation via Diffusion Models with Dynamic Transformer UNet"** (IEEE/CVF WACV 2025). 
+* We acknowledge and credit the original authors for their open architecture and Tsimplex noise methodology, which served as the academic state-of-the-art reference against which our Region-Aware Engine was benchmarked.
+
