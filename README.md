@@ -24,7 +24,16 @@ Printed packaging inspection requires zero tolerance for missing mandatory data 
 | **Inference Latency** | **~3,780 ms (GPU)** | **~80 ms (CPU)** |
 | **Hardware Requirement** | NVIDIA GPU (CUDA) | Lightweight Embedded CPU |
 
+### Visual Detection Gallery (Our Engine)
+![Visual Gallery](results/printed_labels/improved/visual_gallery.png)
+*Figure 1: Multi-category defect detection on registered packaging labels using the Region-Aware Engine. Across all 53 physical test captures (Missing Prints, Ink Smudges, Edge Tears, and Clean Controls), our engine isolates the defect with exact spatial bounding boxes and pixel masks.*
+
+### ROC & Precision-Recall Comparison
+![ROC and PR Curves](results/printed_labels/improved/roc_and_pr_curve_comparison.png)
+*Figure 2: Head-to-head performance curves comparing Academic DTU-Net Diffusion (AUROC 0.512, AP 0.866) against Our Region-Aware Machine Vision Engine (AUROC 1.000, AP 1.000).*
+
 ---
+
 
 ## The Academic Generative Paradox
 
@@ -48,7 +57,11 @@ State-of-the-art anomaly detection literature often recommends generative recons
 3. As a result, the model's anomaly score drops to zero, and the system reports the label as "Clean / Defect-Free."
 4. **Conclusion**: Generative diffusion alone is structurally blind to omissions in structured graphic documents.
 
+![DTU-Net Evaluation Preview](results/printed_labels/final/evaluation_preview.png)
+*Figure 3: Academic DTU-Net baseline evaluation preview. While macroscopic edge tears produce sufficient pixel difference, missing text and ink smudges are easily reconstructed by the generative autoencoder as smooth white paper, yielding near-zero difference maps and causing 32 false negatives.*
+
 ---
+
 
 ## Engine Architecture
 
@@ -136,9 +149,13 @@ printed_label_inspection/
 │   └── 06_printed_label_evaluate.ipynb        # DTU-Net evaluation (generative failure benchmark)
 │
 ├── data/
-│   └── printed_labels/                        # Raw & registered physical test captures
-│       ├── defective/                         # Missing print, smudge, tear captures
-│       └── normal/                            # Pristine golden reference captures
+│   └── printed_labels/                        # Physical label captures
+│       ├── registered/                        # Pre-warped canonical captures (1063 x 650)
+│       │   ├── train/normal/                  # 40 golden reference normal captures
+│       │   ├── validation/normal/             # 10 validation normal captures
+│       │   └── test/                          # 53 test captures (missing, smudge, tear, normal)
+│       ├── Normal/ & Defective/               # Full-resolution raw camera photos (3000 x 4000)
+│       └── reference/label_master.png         # Vector master layout reference
 │
 ├── results/
 │   └── printed_labels/                        # Comparative CSVs, ROC curves, and metrics
@@ -171,11 +188,11 @@ from pathlib import Path
 from src.label_inspection import inspect_label, build_empirical_template
 
 # 1. Load the golden template derived from clean normal references
-template = build_empirical_template(train_dir="data/printed_labels/normal")
+template = build_empirical_template(train_dir="data/printed_labels/registered/train/normal")
 
 # 2. Inspect a registered label capture
 result = inspect_label(
-    image="data/printed_labels/defective/missing_print/sample_01.png",
+    image="data/printed_labels/registered/test/missing_print/M01_B1_091.png",
     template=template
 )
 

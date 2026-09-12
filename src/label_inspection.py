@@ -74,18 +74,25 @@ class LabelCalibration:
 def build_empirical_template(train_dir: Union[str, Path], manifest_path: Optional[Union[str, Path]] = None) -> np.ndarray:
     """Derive golden reference template by computing pixel median of registered training normals."""
     train_dir = Path(train_dir)
-    if manifest_path is None:
-        manifest_path = train_dir / "manifest.csv"
-    else:
-        manifest_path = Path(manifest_path)
-
     margin_mask = get_margin_paper_mask()
-    with manifest_path.open(encoding="utf-8") as stream:
-        records = list(csv.DictReader(stream))
+
+    img_paths: List[Path] = []
+    if manifest_path is not None and Path(manifest_path).exists():
+        with Path(manifest_path).open(encoding="utf-8") as stream:
+            records = list(csv.DictReader(stream))
+        img_paths = [train_dir / row["registered"] for row in records]
+    elif (train_dir / "manifest.csv").exists():
+        with (train_dir / "manifest.csv").open(encoding="utf-8") as stream:
+            records = list(csv.DictReader(stream))
+        img_paths = [train_dir / row["registered"] for row in records]
+    else:
+        img_paths = sorted(list(train_dir.glob("*.png")) + list(train_dir.glob("*.jpg")))
+
+    if not img_paths:
+        raise FileNotFoundError(f"No normal reference images found in {train_dir}")
 
     normalized_imgs: List[np.ndarray] = []
-    for row in records:
-        img_path = train_dir / row["registered"]
+    for img_path in img_paths:
         with Image.open(img_path) as im:
             arr = np.array(im.convert("L"), dtype=np.float32)
         bg = np.median(arr[margin_mask])
@@ -313,3 +320,40 @@ def segment_defect_mask(
                 mask[bt:bb, bl:br] |= comp
 
     return (mask & outer_roi).astype(np.uint8) * 255
+ 
+ 
+def inspect_label(
+    image: Union[str, Path, Image.Image, np.ndarray],
+    template: Optional[np.ndarray] = None,
+    calib: Optional[LabelCalibration] = None,
+) -> Dict[str, Any]:
+    """Top-level inference pipeline for a registered packaging label."""
+    if isinstance(image, (str, Path)):
+        with Image.open(image) as im:
+            pil_img = im.convert("RGB")
+    elif isinstance(image, np.ndarray):
+        pil_img = Image.fromarray(image).convert("RGB")
+    else:
+        pil_img = image.convert("RGB")
+
+    if calib is None:
+        calib = LabelCalibration()
+
+    margin_mask = get_margin_paper_mask()
+    features = extract_features(pil_img, margin_mask)
+    score_res = compute_score(features, calib)
+
+    mask = None
+    if template is not None:
+        mask = segment_defect_mask(pil_img, template, calib)
+
+    return {
+        "decision": "DEFECTIVE" if score_res["is_defect"] else "NORMAL",
+        "score": score_res["score"],
+        "is_defect": score_res["is_defect"],
+        "trigger": score_res["primary_trigger"],
+        "trigger_score": score_res["trigger_score"],
+        "streams": score_res["streams"],
+        "mask": mask,
+    }
+
